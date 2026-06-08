@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eman Bautista — UGC Creator</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f2ee;
+    --accent1: #FF3B00;
+    --accent2: #FFD000;
+    --accent3: #00C2B2;
+    --accent4: #B84FFF;
+    --mid: #1a1a1a;
+    --muted: #888;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  :root.light {
+    --black: #f0ece6;
+    --white: #0a0a0a;
+    --mid: #e2ddd7;
+    --muted: #666;
+    --accent2: #c9a800;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent2);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor.hovering { width: 40px; height: 40px; }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 3rem;
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 0.5; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 4rem;
+    padding: 8rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-photo-frame {
+    width: 360px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #161616;
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .hero-photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero-photo-placeholder { text-align: center; color: rgba(255,255,255,0.15); }
+  .hero-photo-placeholder p { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 0.75rem; }
+  .hero-photo-badge {
+    position: absolute;
+    bottom: 1rem; left: 1rem; right: 1rem;
+    background: var(--accent1);
+    padding: 0.75rem 1rem;
+    border-radius: 2px;
+  }
+  .hero-photo-badge .badge-label { font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.7; }
+  .hero-photo-badge .badge-val { font-family: var(--font-display); font-size: 1.3rem; line-height: 1.1; }
+  .hero-skills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+  .hero-skill { padding: 0.3rem 0.75rem; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1); color: rgba(245,242,238,0.4); border-radius: 2px; }
+  .hero-bg-text {
+    position: absolute;
+    bottom: -2rem;
+    left: -0.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 18vw, 18rem);
+    letter-spacing: -0.02em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.06);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    line-height: 1;
+  }
+  .hero-left { position: relative; z-index: 2; }
+  .hero-tag {
+    display: inline-block;
+    background: var(--accent1);
+    color: var(--white);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.9rem;
+    margin-bottom: 1.5rem;
+    border-radius: 2px;
+  }
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(4.5rem, 9vw, 8.5rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+  }
+  .hero-name span { color: var(--accent2); }
+  .hero-desc {
+    font-size: 1rem;
+    color: rgba(245,242,238,0.6);
+    max-width: 380px;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: none;
+    transition: transform 0.2s ease, opacity 0.2s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: var(--accent1); color: var(--white); }
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid rgba(245,242,238,0.3);
+  }
+  .btn-outline:hover { border-color: var(--white); }
+
+  .hero-right {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+  .hero-right-top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .hero-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem 0 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    width: 100%;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .stat-num.c1 { color: var(--accent2); }
+  .stat-num.c2 { color: var(--accent3); }
+  .stat-num.c3 { color: var(--accent4); }
+  .stat-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.2rem;
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    padding: 1rem 0;
+    background: var(--mid);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marquee 20s linear infinite;
+    width: max-content;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+  .marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 0 2.5rem;
+    white-space: nowrap;
+  }
+  .marquee-item span {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(245,242,238,0.5);
+  }
+  .marquee-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .marquee-dot.r { background: var(--accent1); }
+  .marquee-dot.y { background: var(--accent2); }
+  .marquee-dot.t { background: var(--accent3); }
+  .marquee-dot.p { background: var(--accent4); }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SECTIONS */
+  section { padding: 6rem 3rem; }
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent1);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .section-label::after {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 1px;
+    background: var(--accent1);
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.5rem;
+  }
+
+  /* NICHES */
+  .niches { background: var(--black); }
+  .niche-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1px;
+    margin-top: 3.5rem;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .niche-card {
+    padding: 2.5rem 1.75rem;
+    border: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .niche-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    transform-origin: left;
+  }
+  .niche-card:hover::before { transform: scaleX(1); }
+  .niche-card:hover { background: rgba(255,255,255,0.03); }
+  .niche-card.n1::before { background: var(--accent1); }
+  .niche-card.n2::before { background: var(--accent2); }
+  .niche-card.n3::before { background: var(--accent3); }
+  .niche-card.n4::before { background: var(--accent4); }
+  .niche-card.n5::before { background: var(--accent1); }
+  .niche-card.n6::before { background: var(--accent2); }
+  .niche-icon {
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+    display: block;
+  }
+  .niche-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+  }
+  .niche-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* PORTFOLIO */
+  .portfolio { background: var(--mid); }
+  .portfolio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .filter-tab {
+    padding: 0.45rem 1.1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: transparent;
+    color: rgba(245,242,238,0.5);
+    cursor: none;
+    transition: all 0.2s;
+  }
+  .filter-tab.active, .filter-tab:hover {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    background: rgba(255,208,0,0.05);
+  }
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  .video-card {
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #111;
+    cursor: none;
+    transition: transform 0.3s ease;
+  }
+  .video-card:hover { transform: scale(1.02); }
+  .video-thumb {
+    aspect-ratio: 9/16;
+    background: #161616;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .video-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+  }
+  .thumb-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.15;
+  }
+  .tiktok-embed-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+  .tiktok-icon {
+    width: 48px; height: 48px;
+    opacity: 0.3;
+  }
+  .tiktok-hint {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    text-align: center;
+  }
+  .video-info {
+    padding: 1rem 1.1rem;
+    position: relative;
+  }
+  .video-cat {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .cat-fashion { color: var(--accent4); }
+  .cat-lifestyle { color: var(--accent3); }
+  .cat-food { color: var(--accent1); }
+  .cat-travel { color: var(--accent2); }
+  .cat-tech { color: #60a5fa; }
+  .cat-general { color: var(--muted); }
+  .video-title {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: rgba(245,242,238,0.8);
+    line-height: 1.4;
+  }
+  .video-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 1.25rem;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .play-btn {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: background 0.2s;
+  }
+  .play-btn:hover { background: var(--accent1); }
+  .play-btn svg { width: 14px; height: 14px; margin-left: 2px; }
+  .video-views {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.05em;
+  }
+  .add-video-card {
+    aspect-ratio: 9/16;
+    border: 2px dashed rgba(255,255,255,0.1);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: none;
+    transition: border-color 0.2s, background 0.2s;
+    background: transparent;
+  }
+  .add-video-card:hover {
+    border-color: var(--accent2);
+    background: rgba(255,208,0,0.03);
+  }
+  .add-icon { font-size: 2rem; color: rgba(255,255,255,0.2); }
+  .add-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* HOW IT WORKS */
+  .process { background: var(--black); }
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    margin-top: 4rem;
+  }
+  .step {
+    position: relative;
+    padding-left: 1.5rem;
+    border-left: 1px solid rgba(255,255,255,0.08);
+    transition: border-color 0.2s;
+  }
+  .step:hover { border-color: var(--accent1); }
+  .step-num {
+    font-family: var(--font-display);
+    font-size: 5rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: rgba(255,255,255,0.05);
+    position: absolute;
+    top: -1rem;
+    right: 0;
+  }
+  .step-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .step-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+
+  /* ABOUT */
+  .about { background: var(--mid); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    margin-top: 4rem;
+  }
+  .about-visual {
+    position: relative;
+    aspect-ratio: 3/4;
+    background: #111;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .about-visual-inner {
+    text-align: center;
+    color: rgba(255,255,255,0.15);
+  }
+  .about-visual-inner p {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 0.75rem;
+  }
+  .about-accent-box {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    background: var(--accent1);
+    padding: 1.25rem;
+    border-radius: 2px;
+  }
+  .about-accent-box .label { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.7; }
+  .about-accent-box .value { font-family: var(--font-display); font-size: 2rem; }
+  .about-content h2 { margin-bottom: 1.5rem; }
+  .about-body {
+    font-size: 0.95rem;
+    color: rgba(245,242,238,0.65);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+  }
+  .about-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
+  .about-tag {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(245,242,238,0.5);
+    border-radius: 2px;
+  }
+
+  /* CONTACT */
+  .contact {
+    background: var(--black);
+    text-align: center;
+    padding: 8rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 20vw, 18rem);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.04);
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.04em;
+  }
+  .contact-inner { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; }
+  .contact-pre {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent3);
+    margin-bottom: 1.25rem;
+  }
+  .contact-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+  }
+  .contact-title span { color: var(--accent2); }
+  .contact-sub {
+    font-size: 1.15rem;
+    color: rgba(245,242,238,0.75);
+    font-weight: 500;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    line-height: 1.7;
+  }
+  .contact-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.75rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform 0.2s;
+    border-radius: 2px;
+  }
+  .contact-link:hover { transform: translateY(-3px); }
+  .cl-email { background: var(--accent1); color: var(--white); }
+  .cl-tiktok { background: var(--white); color: var(--black); }
+  .cl-ig { border: 1px solid rgba(255,255,255,0.2); color: var(--white); }
+
+  /* FOOTER */
+  footer {
+    background: var(--mid);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-logo { font-family: var(--font-display); font-size: 1.2rem; letter-spacing: 0.08em; }
+  .footer-copy { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.06em; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 7rem 1.5rem 3rem;
+      gap: 2.5rem;
+    }
+    .hero-photo { width: 100%; }
+    .hero-photo-frame { width: 100%; max-width: 280px; margin: 0 auto; }
+    .hero-right { justify-content: flex-start; }
+    .hero-stats { border-left: none; border-top: 1px solid rgba(255,255,255,0.08); padding: 2rem 0 0; flex-direction: row; flex-wrap: wrap; gap: 1.5rem; }
+    section { padding: 4rem 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .contact { padding: 5rem 1.5rem; }
+    footer { padding: 1.5rem; }
+  }
+
+  /* LIGHT MODE OVERRIDES */
+  .light body { background: var(--black); color: var(--white); }
+  .light .hero-desc { color: rgba(10,10,10,0.6); }
+  .light .hero-bg-text { color: rgba(0,0,0,0.09); -webkit-text-stroke: 0; }
+  .light .hero-photo-frame { background: #d8d2ca; border-color: rgba(0,0,0,0.1); }
+  .light .hero-photo-placeholder { color: rgba(0,0,0,0.2); }
+  .light .hero-skill { border-color: rgba(0,0,0,0.12); color: rgba(10,10,10,0.4); }
+  .light .hero-stats { border-top-color: rgba(0,0,0,0.1); }
+  .light .stat-label { color: #777; }
+  .light .marquee-wrap { background: var(--mid); }
+  .light .marquee-item span { color: rgba(10,10,10,0.45); }
+  .light .niche-grid { border-color: rgba(0,0,0,0.08); }
+  .light .niche-card { border-color: rgba(0,0,0,0.06); }
+  .light .niche-card:hover { background: rgba(0,0,0,0.04); }
+  .light .niche-desc { color: #777; }
+  .light .filter-tab { border-color: rgba(0,0,0,0.15); color: rgba(10,10,10,0.45); }
+  .light .video-card { background: #d8d2ca; }
+  .light .video-thumb { background: #ccc6be; }
+  .light .video-title { color: rgba(10,10,10,0.8); }
+  .light .add-video-card { border-color: rgba(0,0,0,0.12); }
+  .light .add-video-card:hover { background: rgba(0,0,0,0.03); }
+  .light .add-icon { color: rgba(0,0,0,0.2); }
+  .light .add-label { color: rgba(0,0,0,0.2); }
+  .light .step { border-left-color: rgba(0,0,0,0.1); }
+  .light .step-num { color: rgba(0,0,0,0.15); }
+  .light .step-desc { color: #777; }
+  .light .btn-outline { border-color: rgba(0,0,0,0.2); color: var(--white); }
+  .light .btn-outline:hover { border-color: var(--white); }
+  .light .contact-bg { color: rgba(0,0,0,0.04); -webkit-text-stroke: 0; }
+  .light .contact-sub { color: rgba(10,10,10,0.75); }
+  .light .cl-ig { border-color: rgba(0,0,0,0.18); color: var(--white); }
+  .light footer { border-top-color: rgba(0,0,0,0.08); }
+  .light .footer-copy { color: #888; }
+  .light nav { background: rgba(240,236,230,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .light .nav-logo { color: var(--white); }
+  .light .nav-links a { color: var(--white); }
+  .light .hero-tag { background: var(--accent1); color: #f5f2ee; }
+  .light .section-label { color: var(--accent1); }
+  .light .section-label::after { background: var(--accent1); }
+  .light .section-title { color: var(--white); }
+  .light .contact-pre { color: var(--accent3); }
+  .light .contact-title { color: var(--white); }
+  .light .filter-tab.active, .light .filter-tab:hover { color: #c9a800; border-color: #c9a800; }
+  .light .niche-name { color: var(--white); }
+  .light .step-title { color: var(--white); }
+  .light .footer-logo { color: var(--white); }
+  .light .tiktok-hint { color: rgba(0,0,0,0.2); }
+  .light .tiktok-icon { opacity: 0.15; filter: invert(1); }
+  .light .video-views { color: rgba(255,255,255,0.6); }
+
+  /* TOGGLE BUTTON */
+  .theme-toggle {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 200;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--accent1);
+    border: none;
+    cursor: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease, background 0.2s;
+  }
+  .theme-toggle:hover { transform: scale(1.1); }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-tag { animation: fadeUp 0.5s ease both; }
+  .hero-name { animation: fadeUp 0.5s 0.1s ease both; }
+  .hero-desc { animation: fadeUp 0.5s 0.2s ease both; }
+  .hero-btns { animation: fadeUp 0.5s 0.3s ease both; }
+  .hero-stats { animation: fadeUp 0.5s 0.4s ease both; }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">EB</a>
+  <ul class="nav-links">
+    <li><a href="#portfolio">Work</a></li>
+    <li><a href="#niches">Niches</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text">UGC</div>
+
+  <!-- LEFT: NAME + DESC + BUTTONS -->
+  <div class="hero-left">
+    <div class="hero-tag">UGC Creator · Washington, D.C.</div>
+    <h1 class="hero-name">HI, I'M<br><span>EMAN</span></h1>
+    <p class="hero-desc">I'm a UGC content creator specializing in short-form video through social media. If you have a story you need help telling, reach out and let's work together!</p>
+    <p class="hero-desc">Outside of content creation, I am a full time Software Engineer at Amazon! In my freetime, I enjoy drinkmaking, cooking (and eating), working out, and fashion.</p>
+    <div class="hero-btns">
+      <a href="#portfolio" class="btn btn-primary">View My Work</a>
+      <a href="#contact" class="btn btn-outline">Work Together</a>
+    </div>
+  </div>
+
+  <!-- RIGHT: PHOTO + STATS -->
+  <div class="hero-right">
+    <div class="hero-right-top">
+      <div class="hero-photo-frame">
+        <!-- Replace with: <img src="your-photo.jpg" alt="Eman Bautista"> -->
+        <div class="hero-photo-placeholder">
+          <!-- <svg width="40" height="40" viewBox="0 0 60 60" fill="none"><circle cx="30" cy="22" r="12" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/><path d="M6 52c0-13.3 10.7-24 24-24s24 10.7 24 24" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/></svg>
+          <p>Your photo</p> -->
+          <img src="https://emanbau-ugc.s3.us-east-1.amazonaws.com/emanpfp.JPG" alt="Eman Bautista">
+        </div>
+      </div>
+      <div>
+        <div style="font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.04em;line-height:1.1;">EMAN<br>BAUTISTA</div>
+        <div style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-top:0.5rem;">Washington, D.C. 🇺🇸</div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num c1" style="font-size:1.5rem;line-height:1.1;">iPhone 16 Pro</div>
+        <div class="stat-label">Primary camera</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num c2" style="font-size:1.5rem;line-height:1.1;">DJI Osmo Pocket 3</div>
+        <div class="stat-label">Cinematic shots</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num c3" style="font-size:1.5rem;line-height:1.1;">Built for Engagement</div>
+        <div class="stat-label">Storytelling = Engagement = results</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marquee">
+    <div class="marquee-item"><div class="marquee-dot r"></div><span>Fashion</span></div>
+    <div class="marquee-item"><div class="marquee-dot y"></div><span>Lifestyle</span></div>
+    <div class="marquee-item"><div class="marquee-dot t"></div><span>Food & Drink</span></div>
+    <div class="marquee-item"><div class="marquee-dot p"></div><span>Travel</span></div>
+    <div class="marquee-item"><div class="marquee-dot r"></div><span>Tech & Gadgets</span></div>
+    <div class="marquee-item"><div class="marquee-dot y"></div><span>Authentic UGC</span></div>
+    <div class="marquee-item"><div class="marquee-dot t"></div><span>TikTok Native</span></div>
+    <div class="marquee-item"><div class="marquee-dot p"></div><span>Brand Deals</span></div>
+    <div class="marquee-item"><div class="marquee-dot r"></div><span>Fashion</span></div>
+    <div class="marquee-item"><div class="marquee-dot y"></div><span>Lifestyle</span></div>
+    <div class="marquee-item"><div class="marquee-dot t"></div><span>Food & Drink</span></div>
+    <div class="marquee-item"><div class="marquee-dot p"></div><span>Travel</span></div>
+    <div class="marquee-item"><div class="marquee-dot r"></div><span>Tech & Gadgets</span></div>
+    <div class="marquee-item"><div class="marquee-dot y"></div><span>Authentic UGC</span></div>
+    <div class="marquee-item"><div class="marquee-dot t"></div><span>TikTok Native</span></div>
+    <div class="marquee-item"><div class="marquee-dot p"></div><span>Brand Deals</span></div>
+  </div>
+</div>
+
+<!-- NICHES -->
+<section class="niches" id="niches">
+  <div class="section-label">What I Cover (only a few examples!)</div>
+  <h2 class="section-title">MY NICHES</h2>
+  <div class="niche-grid">
+    <div class="niche-card n1">
+      <span class="niche-icon">👗</span>
+      <div class="niche-name">FASHION</div>
+      <div class="niche-desc">OOTDs, hauls, styling tips, and brand reviews.</div>
+    </div>
+    <div class="niche-card n2">
+      <span class="niche-icon">✨</span>
+      <div class="niche-name">LIFESTYLE</div>
+      <div class="niche-desc">Day-in-the-life content, routines, and daily products.</div>
+    </div>
+    <div class="niche-card n3">
+      <span class="niche-icon">🍜</span>
+      <div class="niche-name">FOOD</div>
+      <div class="niche-desc">Restaurant reviews, taste tests, cooking, and food products.</div>
+    </div>
+    <div class="niche-card n4">
+      <span class="niche-icon">✈️</span>
+      <div class="niche-name">TRAVEL</div>
+      <div class="niche-desc">Destinations, stays/experiences, and travel vlogs.</div>
+    </div>
+    <div class="niche-card n5">
+      <span class="niche-icon">📱</span>
+      <div class="niche-name">TECH</div>
+      <div class="niche-desc">Unboxings, app reviews, and gadgets.</div>
+    </div>
+    <div class="niche-card n6">
+      <span class="niche-icon">🎯</span>
+      <div class="niche-name">GENERAL</div>
+      <div class="niche-desc">Versatile content for any brand!</div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="portfolio" id="portfolio">
+  <div class="portfolio-header">
+    <div>
+      <div class="section-label">Selected Work</div>
+      <h2 class="section-title">MY VIDEOS</h2>
+    </div>
+  </div>
+
+  <div class="video-grid" id="videoGrid">
+
+    <!-- VIDEO CARD 1 - rockys matcha -->
+    <div class="video-card">
+      <div class="video-thumb" style="position:relative;background:#000;">
+        <video
+          src="https://emanbau-ugc.s3.us-east-1.amazonaws.com/rockysmatcha.MOV"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:10;"
+          type="video/quicktime"
+          controls
+          playsinline
+          preload="metadata">
+        </video>
+      </div>
+      <div class="video-info">
+        <div class="video-cat cat-food">Food</div>
+        <div class="video-title">Rocky's Matcha</div>
+      </div>
+    </div>
+
+        <!-- VIDEO CARD 2 - bottega  -->
+    <div class="video-card">
+      <div class="video-thumb" style="position:relative;background:#000;">
+        <video
+          src="https://emanbau-ugc.s3.us-east-1.amazonaws.com/bottega.mov"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:10;"
+          type="video/quicktime"
+          controls
+          playsinline
+          preload="metadata">
+        </video>
+      </div>
+      <div class="video-info">
+        <div class="video-cat cat-fashion">Fashion</div>
+        <div class="video-title">Bottega Veneta</div>
+      </div>
+    </div>
+
+    <!-- VIDEO CARD 3 – dannam -->
+    <div class="video-card">
+      <div class="video-thumb" style="position:relative;background:#000;">
+        <video
+          src="https://emanbau-ugc.s3.us-east-1.amazonaws.com/dannam.MOV"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:10;"
+          type="video/quicktime"
+          controls
+          playsinline
+          preload="metadata">
+        </video>
+      </div>
+      <div class="video-info">
+        <div class="video-cat cat-lifestyle">Lifestyle</div>
+        <div class="video-title">D'Annam</div>
+      </div>
+    </div>
+
+    <!-- VIDEO CARD 4 – Our Legacy -->
+    <div class="video-card">
+      <div class="video-thumb" style="position:relative;background:#000;">
+        <video
+          src="https://emanbau-ugc.s3.us-east-1.amazonaws.com/ourlegacy.MOV"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:10;"
+          type="video/quicktime"
+          controls
+          playsinline
+          preload="metadata">
+        </video>
+      </div>
+      <div class="video-info">
+        <div class="video-cat cat-fashion">Fashion</div>
+        <div class="video-title">Our Legacy</div>
+      </div>
+    </div>
+
+    <!-- VIDEO CARD 5 – Vlog -->
+    <div class="video-card">
+      <div class="video-thumb" style="position:relative;background:#000;">
+        <video
+          src="https://emanbau-ugc.s3.us-east-1.amazonaws.com/gtownvlog.MOV"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:10;"
+          type="video/quicktime"
+          controls
+          playsinline
+          preload="metadata">
+        </video>
+      </div>
+      <div class="video-info">
+        <div class="video-cat cat-lifestyle">Lifestyle</div>
+        <div class="video-title">Georgetown Vlog</div>
+      </div>
+    </div>
+
+    <!-- VIDEO CARD 6 – marufuji -->
+    <div class="video-card">
+      <div class="video-thumb" style="position:relative;background:#000;">
+        <iframe 
+          src="https://www.tiktok.com/embed/7537029910485912846" 
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:10;"
+          allowfullscreen 
+          scrolling="no" 
+          allow="encrypted-media;">
+        </iframe>
+      </div>
+      <div class="video-info">
+        <div class="video-cat cat-food">Lifestyle</div>
+        <div class="video-title">Marufuji Market</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="section-label">How It Works</div>
+  <h2 class="section-title">THE PROCESS</h2>
+  <div class="process-steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">BRIEF</div>
+      <div class="step-desc">You share your brand, product, and goals. I ask the right questions to understand what success looks like for you. We decide on a content strategy to move forward with!</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">CONCEPT</div>
+      <div class="step-desc">I develop a concept specific to your audience and product. This step is iterative and collaborative!</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">CREATE</div>
+      <div class="step-desc">The fun part... I film and edit the video! This also includes obtaining your feedback.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-title">DELIVER</div>
+      <div class="step-desc">You get ready-to-post vieos! Simple and seamless. Whether this is posted on an account I own, or an account you own, we deliver.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-bg">COLLAB</div>
+  <div class="contact-inner">
+    <div class="contact-pre">Open for collabs</div>
+    <h2 class="contact-title">LET'S<br><span>WORK</span></h2>
+    <p class="contact-sub">Ready to create content that tells a story? Let's talk about your brand and what we can build together :)</p>
+    <div class="contact-links">
+      <a href="mailto:contact.emanbau@gmail.com" class="contact-link cl-email">✉ Email Me</a>
+      <a href="https://www.tiktok.com/@emanbau" target="_blank" class="contact-link cl-tiktok">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.22 6.22 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.14 8.14 0 004.77 1.53V6.77a4.85 4.85 0 01-1-.08z"/></svg>
+        TikTok 1
+      </a>
+      <a href="https://www.tiktok.com/@byebau" target="_blank" class="contact-link cl-tiktok">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.22 6.22 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.14 8.14 0 004.77 1.53V6.77a4.85 4.85 0 01-1-.08z"/></svg>
+        TikTok 2
+      </a>
+      <a href="https://instagram.com/eman.bau" target="_blank" class="contact-link cl-ig">@ Instagram 1</a>
+      <a href="https://instagram.com/byebauu" target="_blank" class="contact-link cl-ig">@ Instagram 2</a>
+    </div>
+  </div>
+</section>
+
+<!-- THEME TOGGLE -->
+<button class="theme-toggle" id="themeToggle" title="Toggle light/dark mode">🌑</button>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">EMAN BAUTISTA</div>
+  <div class="footer-copy">© 2026 Eman Bautista · UGC Creator</div>
+</footer>
+
+<script>
+  document.documentElement.classList.toggle('light', true);
+  
+  // Theme toggle
+  const toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', () => {
+    document.documentElement.classList.toggle('light');
+    toggle.textContent = document.documentElement.classList.contains('light') ? '🌑' : '🌙';
+  });
+
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .video-card, .niche-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+  });
+
+
+</script>
+</body>
+</html>
